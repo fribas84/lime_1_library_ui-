@@ -2,6 +2,8 @@ import type { Web3Provider } from "@ethersproject/providers";
 import { useWeb3React } from "@web3-react/core";
 import { useEffect, useState } from "react";
 import useUSElectionContract from "../hooks/useUSElectionContract";
+import LoaderTrasaction from "./LoaderTransaction";
+
 
 type USContract = {
   contractAddress: string;
@@ -21,6 +23,8 @@ const USLibrary = ({ contractAddress }: USContract) => {
   const [votesBiden, setVotesBiden] = useState<number | undefined>();
   const [votesTrump, setVotesTrump] = useState<number | undefined>();
   const [stateSeats, setStateSeats] = useState<number | undefined>();
+  const [txHash, setTxHash] = useState<string>();
+  const [loaderVisible, setLoaderVisible] = useState<boolean>(false);
 
   useEffect(() => {
     getCurrentLeader();
@@ -50,7 +54,14 @@ const USLibrary = ({ contractAddress }: USContract) => {
   const submitStateResults = async () => {
     const result:any = [name, votesBiden, votesTrump, stateSeats];
     const tx = await usElectionContract.submitStateResult(result);
+    setTxHash(tx.hash);
+    console.log(tx.hash);
+    setLoaderVisible(true);
+    setTxHash(tx.hash);
+    console.log("HASH: "+  txHash);
+    debugger;
     await tx.wait();
+    setLoaderVisible(false);
     resetForm();
   }
 
@@ -66,7 +77,9 @@ const USLibrary = ({ contractAddress }: USContract) => {
     <p>
       Current Leader is: {currentLeader}
     </p>
+  
     <form>
+      <LoaderTrasaction visible={loaderVisible} txHash={txHash} />
       <label>
         State:
         <input onChange={stateInput} value={name} type="text" name="state" />
