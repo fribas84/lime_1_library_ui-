@@ -15,7 +15,7 @@ export enum Leader {
   TRUMP
 }
 
-const USLibrary = ({ contractAddress }: USContract) => {
+const USElection = ({ contractAddress }: USContract) => {
   const { account, library } = useWeb3React<Web3Provider>();
   const usElectionContract = useUSElectionContract(contractAddress);
   const [currentLeader, setCurrentLeader] = useState<string>('Unknown');
@@ -31,8 +31,9 @@ const USLibrary = ({ contractAddress }: USContract) => {
   },[])
 
   const getCurrentLeader = async () => {
-    const currentLeader = await usElectionContract.currentLeader();
-    setCurrentLeader(currentLeader == Leader.UNKNOWN ? 'Unknown' : currentLeader == Leader.BIDEN ? 'Biden' : 'Trump')
+    const cLeader = await usElectionContract.currentLeader();
+    console.log(cLeader);
+    setCurrentLeader(cLeader == Leader.UNKNOWN ? 'Unknown' : cLeader == Leader.BIDEN ? 'Biden' : 'Trump');
   }
 
   const stateInput = (input) => {
@@ -63,6 +64,7 @@ const USLibrary = ({ contractAddress }: USContract) => {
     await tx.wait();
     setLoaderVisible(false);
     resetForm();
+    await getCurrentLeader();
   }
 
   const resetForm = async () => {
@@ -79,7 +81,6 @@ const USLibrary = ({ contractAddress }: USContract) => {
     </p>
   
     <form>
-      <LoaderTrasaction visible={loaderVisible} txHash={txHash} />
       <label>
         State:
         <input onChange={stateInput} value={name} type="text" name="state" />
@@ -101,6 +102,8 @@ const USLibrary = ({ contractAddress }: USContract) => {
     <div className="button-wrapper">
       <button onClick={submitStateResults}>Submit Results</button>
     </div>
+    <LoaderTrasaction visible={loaderVisible} txHash={txHash} />
+    
     <style jsx>{`
         .results-form {
           display: flex;
@@ -116,4 +119,4 @@ const USLibrary = ({ contractAddress }: USContract) => {
   );
 };
 
-export default USLibrary;
+export default USElection;
