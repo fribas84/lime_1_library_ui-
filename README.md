@@ -8,8 +8,8 @@ Improve the US election website with:
 - [X] Automatically show the current leader on load and update it on results being submitted
 - [X] Show the current seats won by each candidate. Automatically update the results on successful transactions.
 - [X] Automatically show the state of the election - ended or not.
-- [ ] Add the ability for the user to end the election.
-- [ ] React to failure by telling the users something went wrong. If you have some kind of error message - display it for the user.
+- [X] Add the ability for the user to end the election.
+- [X] React to failure by telling the users something went wrong. If you have some kind of error message - display it for the user.
 
 ## Task 2: Create Book Library contract webapp
 Create a branch for your library webapp out of the main branch and create similar webapp to the one for the Election. The webapp should:

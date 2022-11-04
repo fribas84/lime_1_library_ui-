@@ -35,36 +35,91 @@ const USElection = ({ contractAddress }: USContract) => {
 
 
   useEffect(() => {
-    getCurrentLeader();
-    getBidenSeats();
-    getTrumpSeats();
-    getElectionStatus();
-
+    try {
+      getCurrentLeader();
+      getBidenSeats();
+      getTrumpSeats();
+      getElectionStatus();
+    }
+  
+    catch(err){
+        if(err.message){
+          setErrorMessage(err.message + err.data.message);
+        }
+        else{
+          setErrorMessage(err);
+        }
+        
+        setShowError(true);
+    }
   },[])
 
   const handleCleanErrors= () => {
-    console.log("handleClean");
     setShowError(false);
+    setErrorMessage("");
   }
 
   const getElectionStatus = async () => {
-    const status = await usElectionContract.electionEnded();
-    console.log(status);
-    setElectionEnded(status);
+    try{
+      const status = await usElectionContract.electionEnded();
+      setElectionEnded(status);
+    }
+    catch(err){
+      if(err.message){
+        setErrorMessage(err.message + err.data.message);
+      }
+      else{
+        setErrorMessage(err);
+      }
+      setShowError(true);
+    }
   }
   const getCurrentLeader = async () => {
+    try{
     const currentLeader = await usElectionContract.currentLeader();
     setCurrentLeader(currentLeader == Leader.UNKNOWN ? 'Unknown' : currentLeader == Leader.BIDEN ? 'Biden' : 'Trump');
+    }
+    catch(err){
+      if(err.message){
+        setErrorMessage(err.message + err.data.message);
+      }
+      else{
+        setErrorMessage(err);
+      }
+      setShowError(true);
+    }
   }
 
   const getBidenSeats = async () =>{
+    try{
     const bidenSeats = await usElectionContract.seats(Leader.BIDEN);
     setBidenSeats(bidenSeats);
+    }
+    catch(err){
+      if(err.message){
+        setErrorMessage(err.message + err.data.message);
+      }
+      else{
+        setErrorMessage(err);
+      }
+      setShowError(true);
+    }
   }
   
   const getTrumpSeats = async () =>{
+    try{
     const TrumpSeats = await usElectionContract.seats(Leader.TRUMP);
     setTrumpSeats(TrumpSeats);
+    }
+    catch(err){
+      if(err.message){
+        setErrorMessage(err.message + err.data.message);
+      }
+      else{
+        setErrorMessage(err);
+      }
+      setShowError(true);
+    }
   }
 
   const stateInput = (input) => {
@@ -84,12 +139,27 @@ const USElection = ({ contractAddress }: USContract) => {
   }
 
   const submitEndElection = async () => {
+    try{
     const tx = await usElectionContract.endElection();
     setTxHash(tx.hash);
     setLoaderVisible(true);
     await tx.wait();
     setLoaderVisible(false);
-    console.log(tx);
+    getCurrentLeader();
+    getBidenSeats();
+    getTrumpSeats();
+    getElectionStatus();
+
+    }
+    catch(err){
+      if(err.message){
+        setErrorMessage(err.message + err.data.message);
+      }
+      else{
+        setErrorMessage(err);
+      }
+      setShowError(true);
+    }   
 
   }
 
@@ -100,7 +170,6 @@ const USElection = ({ contractAddress }: USContract) => {
       setTxHash(tx.hash);
       setLoaderVisible(true);
       const txReceipt = await tx.wait();
-      console.log(txReceipt.events);
       setLoaderVisible(false);
       resetForm();
       getCurrentLeader();
@@ -108,11 +177,16 @@ const USElection = ({ contractAddress }: USContract) => {
       getTrumpSeats();
     }
     catch(err){
-      console.log(err);
-      setErrorMessage(err.message + err.data.message);
+      if(err.message){
+        setErrorMessage(err.message);
+      }
+      if(err.data.message){
+        setErrorMessage(err.data.message)
+      }
+      else{
+        setErrorMessage(err);
+      }
       setShowError(true);
-      console.log(errorMessage);
-
     }
         
   }
