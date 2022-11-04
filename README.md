@@ -6,8 +6,8 @@ Improve the US election website with:
 - [X] Add a loader component of your choice that should indicate a transaction in progress. Make sure you are showing the transaction hash and a link to etherscan while the transaction is being mined
 
 - [X] Automatically show the current leader on load and update it on results being submitted
-- [ ] Show the current seats won by each candidate. Automatically update the results on successful transactions.
-- [ ] Automatically show the state of the election - ended or not.
+- [X] Show the current seats won by each candidate. Automatically update the results on successful transactions.
+- [X] Automatically show the state of the election - ended or not.
 - [ ] Add the ability for the user to end the election.
 - [ ] React to failure by telling the users something went wrong. If you have some kind of error message - display it for the user.
 
