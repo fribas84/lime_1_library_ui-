@@ -35,6 +35,10 @@ const USElection = ({ contractAddress }: USContract) => {
 
 
   useEffect(() => {
+    updateData();
+  },[])
+
+  const updateData = () => {
     try {
       getCurrentLeader();
       getBidenSeats();
@@ -52,8 +56,7 @@ const USElection = ({ contractAddress }: USContract) => {
         
         setShowError(true);
     }
-  },[])
-
+  }
   const handleCleanErrors= () => {
     setShowError(false);
     setErrorMessage("");
@@ -145,10 +148,7 @@ const USElection = ({ contractAddress }: USContract) => {
     setLoaderVisible(true);
     await tx.wait();
     setLoaderVisible(false);
-    getCurrentLeader();
-    getBidenSeats();
-    getTrumpSeats();
-    getElectionStatus();
+    updateData();
 
     }
     catch(err){
@@ -172,9 +172,7 @@ const USElection = ({ contractAddress }: USContract) => {
       const txReceipt = await tx.wait();
       setLoaderVisible(false);
       resetForm();
-      getCurrentLeader();
-      getBidenSeats();
-      getTrumpSeats();
+      updateData();
     }
     catch(err){
       if(err.message){
