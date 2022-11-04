@@ -1,5 +1,5 @@
 import { FallingLines } from  'react-loader-spinner';
-import { useState } from 'react';
+
 
 type LoaderTransactionProps ={
     visible: boolean;
@@ -7,8 +7,6 @@ type LoaderTransactionProps ={
 }
 
 const LoaderTransaction = ({visible, txHash}: LoaderTransactionProps) =>{
-
-
     return(
         <div hidden={!visible}>
             <FallingLines
@@ -19,7 +17,7 @@ const LoaderTransaction = ({visible, txHash}: LoaderTransactionProps) =>{
             />
             <p>Trasaction hash: {txHash}</p>
             <p><a href={"https://goerli.etherscan.io/tx/" + txHash} target="_blank" rel="noopener noreferrer">
-                View Tx in Etherscan!</a></p>
+                Click to view transaction in Etherscan</a></p>
         </div>
 
     );
